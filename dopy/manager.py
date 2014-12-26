@@ -49,9 +49,9 @@ class DoManager(object):
                 'size_id': size_id,
                 'image_id': image_id,
                 'region_id': region_id,
-                'virtio': virtio,
-                'private_networking': private_networking,
-                'backups_enabled': backups_enabled,
+                'virtio': str(virtio).lower(),
+                'private_networking': str(private_networking).lower(),
+                'backups_enabled': str(backups_enabled).lower(),
             }
             if ssh_key_ids:
                 params['ssh_key_ids'] = ssh_key_ids
@@ -141,7 +141,7 @@ class DoManager(object):
         if self.api_version == 2:
             params = {'image': image_id}
             json = self.droplet_v2_action(id, 'restore', params)
-        else: 
+        else:
             params = {'image_id': image_id}
             json = self.request('/droplets/%s/restore/' % id, params)
         json.pop('status', None)
@@ -217,7 +217,7 @@ class DoManager(object):
     def destroy_image(self, image_id):
         if self.api_version == 2:
             self.request('/images/%s' % id, method='DELETE')
-        else: 
+        else:
             self.request('/images/%s/destroy' % image_id)
         return True
 
@@ -312,7 +312,7 @@ class DoManager(object):
     def new_domain_record(self, domain_id, record_type, data, name=None, priority=None, port=None, weight=None):
         params = {'data': data}
 
-        if self.api_version == 2: 
+        if self.api_version == 2:
             params['type'] = record_type
         else:
             params['record_type'] = record_type
@@ -355,7 +355,7 @@ class DoManager(object):
     def destroy_domain_record(self, domain_id, record_id):
         if self.api_version == 2:
             self.request('/domains/%s/records/%s' % (domain_id, record_id), method='DELETE')
-        else: 
+        else:
             self.request('/domains/%s/records/%s/destroy/' % (domain_id, record_id))
         return True
 
